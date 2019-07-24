@@ -22,11 +22,11 @@ $busqueda="$num_mes-$ano";
 $conn = new mysqli("us-cdbr-gcp-east-01.cleardb.net", "bd89beb4bf87fb", "811f1a57", "gcp_ab76fd0b00d641a5d283");
 
 //selección de la base de datos con la que vamos a trabajar 
-mysql_select_db("gastosdb"); 
+mysql_select_db("gastos"); 
 
 //realizamos consulta a la BD.
 //$result=mysql_query("select * from gasto Order By fecha DESC LIMIT $cur, $max") or die(mysql_error());
-$sSQL="select * from gasto Order By fecha DESC LIMIT $cur, $max";
+$sSQL="select * from gastos Order By fecha DESC LIMIT $cur, $max";
 $result=$conn->query($sSQL) or ("Connection failed: " . $conn->connect_error); 
 
 //=================calcular total del mes===========================================================
