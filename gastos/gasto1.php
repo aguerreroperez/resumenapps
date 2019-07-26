@@ -34,36 +34,52 @@
 <?php
 //$numero = $_POST[numero];
 //$nom_dia = $_POST[nom_dia];
+$saldo= $_GET[saldo];
 $dia = $_POST[dia];
 $mes = $_POST[mes];
 $ano = $_POST[ano];
 $fecha = "$dia-$mes-$ano";
 $detalle = $_POST[detalle];
 $tipo = $_POST[tipo];
-$responsable = $_POST[responsable];
+//$saldo = $_POST[saldo];
 $monto = $_POST[monto];
 
 //echo "datos:$dia-$mes-$ano-$fecha-$detalle-$responsable-$monto <br>";
 
 //Conexion con la base
-$conexion = mysql_connect("localhost","admin","warrior"); 
+$conn = new mysqli("us-cdbr-gcp-east-01.cleardb.net", "bd89beb4bf87fb", "811f1a57", "gcp_ab76fd0b00d641a5d283");
+
+if ($conn->connect_error) {
+die("Connection failed: " . $conn->connect_error); }
 
 //selección de la base de datos con la que vamos a trabajar 
-mysql_select_db("gastosdb",$conexion);
 
-if ($dia=='dia' or $mes=='mes' or $detalle=='' or $monto=='' or $tipo=='selec...' or $responsable=='selec...') 
+if ($dia=='dia' or $mes=='mes' or $detalle=='' or $monto=='' or $tipo=='selec...' ) 
 
 		{ echo '<META HTTP-EQUIV="REFRESH" CONTENT="3;URL=gasto.php"><h1><center>Informacion incompleta!! <br> Retornando...</center></h1>'; }
 	
-		else { 
+			else { 
 
-			$sSQL="insert into gasto (fecha,detalle,tipo,responsable,monto) values ('$fecha','$detalle','$tipo','$responsable','$monto')";
-     
-			mysql_query($sSQL) or die(mysql_error());
-	
-			echo "<h1><div align='center'><font size=3>Registro Ingresado</font></div></h1>";
-			echo '<META HTTP-EQUIV="REFRESH" CONTENT="4;URL=gasto.php">';
-	}
+					if ($tipo=="Egreso"){  $saldo_nuevo = $saldo - $monto; 					
+											$sSQL="insert into gastos (fecha,detalle,tipo,monto,saldo) values ('$fecha','$detalle','$tipo','$monto','$saldo_nuevo')";
+													//echo "tipo=$tipo";
+												if ($conn->query($sSQL) === TRUE) {    echo "<h1><div align='center'><font size=3>Egreso realizado!!</font></div></h1>";
+												echo '<META HTTP-EQUIV="REFRESH" CONTENT="4;URL=gasto.php">';}
+												
+													else { echo "Error: " . $sSQL . "<br>" . $conn->error;}
+											}
+							
+							else {
+									$saldo_nuevo= $saldo + $monto;
+					
+										$sSQL="insert into gastos (fecha,detalle,tipo,monto,saldo) values ('$fecha','$detalle','$tipo','$monto','$saldo_nuevo')";
+													//echo "tipo=$tipo";
+										if ($conn->query($sSQL) === TRUE) {    echo "<h1><div align='center'><font size=3>Ingreso realizado!!</font></div></h1>";
+												echo '<META HTTP-EQUIV="REFRESH" CONTENT="4;URL=gasto.php">';}
+												
+											else { echo "Error: " . $sSQL . "<br>" . $conn->error;}
+									}
+				}
 
 ?>
 

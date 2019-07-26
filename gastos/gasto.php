@@ -2,49 +2,29 @@
 
 <?php
 
-//-------------------------------------------------
- if($_GET[page])
-    {        $page = $_GET[page];     }
-else{        $page = 1;     }
-
-$max = 15; 
-$cur = (($page * $max) - $max); 
-//---------------------------------------------------
-
 $fecha_dia=date('Ymd');
+$dia=date('d');
 $mes=date('M');
 $ano=date('Y');
 $num_mes=date('m');
-$busqueda="$num_mes-$ano";
+$busqueda="$num-mes-$ano";
 
 //Conexion con la base
-//mysql_connect("localhost","admin","warrior"); 
 $conn = new mysqli("us-cdbr-gcp-east-01.cleardb.net", "bd89beb4bf87fb", "811f1a57", "gcp_ab76fd0b00d641a5d283");
 
-//selección de la base de datos con la que vamos a trabajar 
-mysql_select_db("gastos"); 
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+ }
 
-//realizamos consulta a la BD.
-//$result=mysql_query("select * from gasto Order By fecha DESC LIMIT $cur, $max") or die(mysql_error());
-$sSQL="select * from gastos Order By fecha DESC LIMIT $cur, $max";
-$result=$conn->query($sSQL) or ("Connection failed: " . $conn->connect_error); 
+$sSQL1 = "SELECT saldo,idgastos FROM gastos ORDER By idgastos DESC LIMIT 1";
+//$sSQL1 = "SELECT * FROM gastos ORDER By idgastos";
+$saldo = $conn->query($sSQL1);
+if($sSQL1->errno) die($sSQL1->error);
 
-//=================calcular total del mes===========================================================
-
-$total_mes=mysql_query(" select monto from gasto where fecha LIKE '%" .$busqueda. "%' ") or die(mysql_error());
-
-$i=0;
-$total=0;
-
-while ($row1=mysql_fetch_array($total_mes))
-
-{
-
-$total=$total + $row1[monto];
-
-$i++;
-
-}
+$fila = $saldo->fetch_assoc();
+$saldo=$fila[saldo];
+$idgastos1=$fila[idgastos];
+//echo "saldo=$saldo";
 
 //=================================================================================================
 
@@ -72,7 +52,7 @@ $i++;
  
       <td valign="top">
       <div style="text-align: center;"> </div>
-      <form method="post" action="gasto1.php" name="ingresar" >
+      <form method="post" action="gasto1.php<?php echo"?saldo=$saldo"; ?>" name="ingresar" >
         <div style="text-align: center; background-color: #2471a3; font-family: Arial Narrow; color: #ffffff"><span style="font-weight: bold;"><big><big>GASTOS</big></big>
         </span> </div>
 <p>
@@ -84,38 +64,37 @@ $i++;
         <span>&nbspFecha:&nbsp;</span>
 	
         <select name="dia" required>
-        <option>dia</option>
-        <option>01</option>
-        <option>02</option>
-        <option>03</option>
-        <option>04</option>
-        <option>05</option>
-        <option>06</option>
-        <option>07</option>
-        <option>08</option>
-        <option>09</option>
-        <option>10</option>
-        <option>11</option>
-        <option>12</option>
-        <option>13</option>
-        <option>14</option>
-        <option>15</option>
-        <option>16</option>
-        <option>17</option>
-        <option>18</option>
-        <option>19</option>
-        <option>20</option>
-        <option>21</option>
-        <option>22</option>
-        <option>23</option>
-        <option>24</option>
-        <option>25</option>
-        <option>26</option>
-        <option>27</option>
-        <option>28</option>
-        <option>29</option>
-        <option>30</option>
-        <option>31</option>
+		<OPTION value="01" <?php if ($dia=="01") {echo "selected";} ?> > 01 </option>
+		<OPTION value="02" <?php if ($dia=="02") {echo "selected";} ?> > 02 </option>
+		<OPTION value="03" <?php if ($dia=="03") {echo "selected";} ?> > 03 </option>
+		<OPTION value="04" <?php if ($dia=="04") {echo "selected";} ?> > 04 </option>
+		<OPTION value="05" <?php if ($dia=="05") {echo "selected";} ?> > 05 </option>
+		<OPTION value="06" <?php if ($dia=="06") {echo "selected";} ?> > 06 </option>
+		<OPTION value="07" <?php if ($dia=="07") {echo "selected";} ?> > 07 </option>
+		<OPTION value="08" <?php if ($dia=="08") {echo "selected";} ?> > 08 </option>
+		<OPTION value="09" <?php if ($dia=="09") {echo "selected";} ?> > 09 </option>
+		<OPTION value="10" <?php if ($dia=="10") {echo "selected";} ?> > 10 </option>
+		<OPTION value="11" <?php if ($dia=="11") {echo "selected";} ?> > 11 </option>
+		<OPTION value="12" <?php if ($dia=="12") {echo "selected";} ?> > 12 </option>
+        <OPTION value="13" <?php if ($dia=="13") {echo "selected";} ?> > 13 </option>
+		<OPTION value="14" <?php if ($dia=="14") {echo "selected";} ?> > 14 </option>
+		<OPTION value="15" <?php if ($dia=="15") {echo "selected";} ?> > 15 </option>
+		<OPTION value="16" <?php if ($dia=="16") {echo "selected";} ?> > 16 </option>
+		<OPTION value="17" <?php if ($dia=="17") {echo "selected";} ?> > 17 </option>
+		<OPTION value="18" <?php if ($dia=="18") {echo "selected";} ?> > 18 </option>
+		<OPTION value="19" <?php if ($dia=="19") {echo "selected";} ?> > 19 </option>
+		<OPTION value="20" <?php if ($dia=="20") {echo "selected";} ?> > 20 </option>
+		<OPTION value="21" <?php if ($dia=="21") {echo "selected";} ?> > 21 </option>
+		<OPTION value="22" <?php if ($dia=="22") {echo "selected";} ?> > 22 </option>
+		<OPTION value="23" <?php if ($dia=="23") {echo "selected";} ?> > 23 </option>
+		<OPTION value="24" <?php if ($dia=="24") {echo "selected";} ?> > 24 </option>
+		<OPTION value="25" <?php if ($dia=="25") {echo "selected";} ?> > 25 </option>
+		<OPTION value="26" <?php if ($dia=="26") {echo "selected";} ?> > 26 </option>
+		<OPTION value="27" <?php if ($dia=="27") {echo "selected";} ?> > 27 </option>
+		<OPTION value="28" <?php if ($dia=="28") {echo "selected";} ?> > 28 </option>
+		<OPTION value="29" <?php if ($dia=="29") {echo "selected";} ?> > 29 </option>
+		<OPTION value="30" <?php if ($dia=="30") {echo "selected";} ?> > 30 </option>
+		<OPTION value="31" <?php if ($dia=="31") {echo "selected";} ?> > 31 </option>
         </select>
 
         <select name="mes" required>
@@ -135,7 +114,7 @@ $i++;
 
         <select name="ano" required>
         <option <?php if ($ano=="2018") {echo "selected";} ?> >2018</option>
-	<option <?php if ($mes=="2019") {echo "selected";} ?> >2019</option>
+	<option <?php if ($ano=="2019") {echo "selected";} ?> >2019</option>
         </select><br>
 <!-- fin fecha -->
 
@@ -148,20 +127,18 @@ $i++;
 
 	<select name="tipo" required>
 	<option>selec...</option>
-        <option value="Gi" >Giro (Gi)</option>
-	<option value="Re" >Redcompra (Re)</option>
-	<option value="Tr" >Tranferencia (Tr)</option>
-	<option value="Ef" >Efectivo (Ef)</option>
-        </select> <br>
+    <option>Egreso</option>
+	<option>Ingreso</option>
+	</select> <br>
 
-<!-- responsable del gasto -->
+<!-- responsable del gasto 
 	<span >&nbspResponsable:&nbsp;</span>
 
 	<select name="responsable" required>
 	<option>selec...</option>
         <option>Alberto</option>
 	<option>Amey</option>
-        </select><br>
+        </select><br> -->
 
 <!-- monto del gasto -->
 	<span>&nbspMonto:&nbsp;&nbsp;</span><input type="number" name="monto" maxlength="6" size="6" required><br>
@@ -174,13 +151,7 @@ $i++;
 
 </p>
 <!--------------------gasto total ---------------------------------------->
-
 <hr>
-
-<h3>Total Gastos del mes : $ <?php echo"<font style='font-size: 11pt; font-family: Arial,Helvetica,sans-serif; color: #FF5733;'> $total </font>=> $i oper."; ?> </h3> 
-
-<hr>
-
 <!------------------------ listado de Gastos ----------------------------->
 
 Pag:
@@ -191,18 +162,27 @@ Pag:
 <th>Fecha</th>
 <th>Detalle</th>
 <th>Tipo</th>
-<th>Resp</th>
 <th>Monto</th>
-<th><img src='skin/delete.png'></th>
+<th>Saldo</th>
+<th>Borrar</th>
 </tr>
 
 <?php
-//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------PAGINADOR------------------------------------------------------------------------
 
-$counttotal = mysql_query("select * from gasto limit 90") or die(mysql_error()); 
-$counttotal = mysql_num_rows($counttotal); 
+if($_GET[page])
+    {        $page = $_GET[page];     }
+else{        $page = 1;     }
+
+$max = 15; 
+$cur = (($page * $max) - $max); 
+
+$sSQL = "select * from gastos Order By idgastos DESC LIMIT $cur, $max";
+$resultado = $conn->query($sSQL);
+if($consulta->errno) die($consulta->error);
+
+$counttotal = $resultado->num_rows;
 $total_pages = ceil($counttotal / $max); 
-//$total_pages = "6";
 
 if($page > 1){ 
                 $prev = ($page - 1); 
@@ -224,11 +204,10 @@ if($page < $total_pages){
                	 echo '<a href="?page='. $next.'"><font size=1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp>></font></a>'; // link a la proxima pagina
                     } 
 
-//-------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------CARTOLA--------------------------------------------------------------------------
 
-
-while ($row=mysql_fetch_array($result))
-
+while($row = $resultado->fetch_assoc()) 
 {
 
 	echo "<tr><td><font size=1>$row[fecha]</font></td>";
@@ -237,21 +216,20 @@ while ($row=mysql_fetch_array($result))
 
 	echo "<td><font size=1>$row[tipo]</td>";
 
-	//resumen responsable
-
-	$re_resp=substr($row[responsable],0,2);
-
-	echo "<td><font size=1>$re_resp</td>";
-
 	echo "<td><font size=1>$row[monto]</td>";
 
-	echo "<td><center><a href=borrar.php?id=$row[id]><img src='skin/delete.png' title='Borrar el registro'></center></a></td>";
-
+	echo "<td><font size=1>$row[saldo]</td>";
+	
+	if ($row[idgastos]==$idgastos1) { echo "<td><center><a href=borrar.php?idgastos=$row[idgastos]&saldo=$saldo><img src='skin/delete.png' title='Borrar el registro'></center></a></td>"; }
+	    else {
+	echo "<td><center><img src='skin/delete.png' title='Borrar el registro'></center></td>";
+		}
 }
 
-mysql_free_result($result)
-
+$resultado->free();
+//-------------------------------------------------------------------------------------------------------------------
 ?>
+
 </td>
 </tr>
 </tbody>

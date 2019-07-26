@@ -32,21 +32,31 @@
 
 
 <?php
-$id = $_GET[id];
+$idgastos = $_GET[idgastos];
+$saldo = $_GET[saldo];
 
 //echo "datos:$dia-$mes-$ano-$fecha-$detalle-$responsable-$monto <br>";
 
 //Conexion con la base
-$conexion = mysql_connect("localhost","admin","warrior"); 
+$conn = new mysqli("us-cdbr-gcp-east-01.cleardb.net", "bd89beb4bf87fb", "811f1a57", "gcp_ab76fd0b00d641a5d283");
+
+if ($conn->connect_error) {
+die("Connection failed: " . $conn->connect_error); }
 
 //selección de la base de datos con la que vamos a trabajar 
-mysql_select_db("gastosdb",$conexion);
+$sSQL = "DELETE FROM gastos WHERE idgastos='$idgastos'";  
 
- $sSQL="Delete From gasto where id='$id'";
- mysql_query($sSQL) or die(mysql_error());
-	
+if ($conn->query($sSQL) === TRUE)
+		{
 			echo "<h1><div align='center'><font size=3>Registro Borrado</font></div></h1>";
 			echo "<META HTTP-EQUIV='REFRESH' CONTENT='4;URL=gasto.php'>";
+			
+		} else {
+					echo "Error al Borrar: " . $conn->error;
+					echo "<META HTTP-EQUIV='REFRESH' CONTENT='4;URL=gasto.php'>";
+				}
+
+$conn->close();
 
 ?>
 
